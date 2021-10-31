@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>profile</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<!--    <link th:href="@{./css/style.css}" rel="stylesheet" />-->
+
+    <style>
+        .img{
+            border-radius: 50%;
+            width: 50px;
+        }
+        #text {
+            color: white;
+            font-size: 25px;
+            margin: 5px 15px;
+        }
+        .main {
+            width: 248px;
+            margin: auto;
+        }
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            max-width: 300px;
+            margin: auto;
+            text-align: center;
+        }
+
+        .title {
+            color: grey;
+            font-size: 18px;
+        }
+        .card img{
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">Home page</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="/">Home</a></li>
+            <li><a href="#" th:if="${user}">profile</a></li>
+            <li><a href="#">Page 2</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/signup" th:if="!${user}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+            <li><a href="/login" th:if="!${user}" ><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            <li th:if="${user}"><p th:text="${user.getFirstName()}" id="text"></li>
+            <li th:if="${user}"><img th:src="${user.getImgUrl()}" class="img"></li>
+            <li><a href="/perform_logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main class="main">
+    <div class="card">
+        <img th:src="${user.getImgUrl()}" th:alt="${user.getFirstName()}" style="width:100%">
+        <h1 class="title" th:text="'First Name :' + ${user.getFirstName()}"></h1>
+        <p th:text="'Last Name :' + ${user.getFirstName()}"></p>
+    </div>
+</main>
+
+</body>
+</html>
