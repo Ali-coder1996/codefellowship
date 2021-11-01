@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>specificUser</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<style>
+    main {
+        margin: 0 auto;
+        max-width: 800px;
+        padding: 0 20px;
+    }
+    .img{
+        border-radius: 50%;
+        width: 50px;
+    }
+    #text {
+        color: white;
+        font-size: 25px;
+        margin: 5px 15px;
+    }
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        max-width: 300px;
+        margin: auto;
+        text-align: center;
+    }
+
+    .title {
+        color: grey;
+        font-size: 18px;
+    }
+    .card img{
+        border-radius: 50%;
+    }
+    /* Chat containers */
+    .containers {
+        border: 2px solid #dedede;
+        background-color: #f1f1f1;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 10px 0;
+    }
+    /* Darker chat container */
+    .darker {
+        border-color: #ccc;
+        background-color: #ddd;
+    }
+    /* Clear floats */
+    .containers::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+    /* Style images */
+    .containers img {
+        float: left;
+        max-width: 60px;
+        width: 100%;
+        margin-right: 20px;
+        border-radius: 50%;
+    }
+    /* Style the right image */
+    .containers img.right {
+        float: right;
+        margin-left: 20px;
+        margin-right:0;
+    }
+    /* Style time text */
+    .time-right {
+        float: right;
+        color: #aaa;
+    }
+    .post {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+</style>
+<body>
+<nav th:replace="fragments/fragments :: nav"></nav>
+
+<main>
+        <div th:if="${user}" class="card" th:each="user :${user}">
+            <img th:src="${user.getImgUrl()}" th:alt="${user.getFirstName()}" style="width:100%">
+            <h1 class="title" th:text="'First Name :' + ${user.getFirstName()}"></h1>
+            <p th:text="'Last Name :' + ${user.getFirstName()}"></p>
+            <p th:text="'Bio :' + ${user.getBio()}"></p>
+        </div>
+    <div th:if="${post}" th:each="post :${post}" class="containers darker">
+        <div th:each="posts :${post.getPosts()}" class="post">
+            <div>
+                <img th:src="${post.getImgUrl()}" th:alt="${post.getPosts().get(0).getApplicationUser().getFirstName()}">
+            </div>
+            <div>
+                <p th:text="${posts.getBody()}"></p>
+            </div>
+            <div>
+                <span class="time-right" th:text="${posts.getCreatedAt()}"></span>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
