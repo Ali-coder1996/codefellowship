@@ -13,6 +13,7 @@
 * `login` --> used to preview the login form.
 * `signup` --> used to preview the signup form.
 * `profile` --> used to preview the user details and post
+* `All user` --> used to preview the all user details and post
 
 ### go to clone app
 cd ~/codefellowship

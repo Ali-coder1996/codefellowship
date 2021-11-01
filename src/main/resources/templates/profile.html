@@ -1,12 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>profile</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <!--    <link th:href="@{./css/style.css}" rel="stylesheet" />-->
-
     <style>
+        main {
+            margin: 0 auto;
+            max-width: 800px;
+            padding: 0 20px;
+        }
         .img{
             border-radius: 50%;
             width: 50px;
@@ -15,10 +19,6 @@
             color: white;
             font-size: 25px;
             margin: 5px 15px;
-        }
-        .main {
-            width: 248px;
-            margin: auto;
         }
         .card {
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -34,6 +34,50 @@
         .card img{
             border-radius: 50%;
         }
+        /* Chat containers */
+        .containers {
+            border: 2px solid #dedede;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        /* Darker chat container */
+        .darker {
+            border-color: #ccc;
+            background-color: #ddd;
+        }
+        /* Clear floats */
+        .containers::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+        /* Style images */
+        .containers img {
+            float: left;
+            max-width: 60px;
+            width: 100%;
+            margin-right: 20px;
+            border-radius: 50%;
+        }
+        /* Style the right image */
+        .containers img.right {
+            float: right;
+            margin-left: 20px;
+            margin-right:0;
+        }
+        /* Style time text */
+        .time-right {
+            float: right;
+            color: #aaa;
+        }
+        .post {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -43,9 +87,8 @@
             <a class="navbar-brand" href="/">Home page</a>
         </div>
         <ul class="nav navbar-nav">
-            <li class="active"><a href="/">Home</a></li>
             <li><a href="#" th:if="${user}">profile</a></li>
-            <li><a href="#">Page 2</a></li>
+            <li th:if="${user}"><a href="#" th:href="@{/user}">All users</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="/signup" th:if="!${user}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
@@ -62,6 +105,28 @@
         <img th:src="${user.getImgUrl()}" th:alt="${user.getFirstName()}" style="width:100%">
         <h1 class="title" th:text="'First Name :' + ${user.getFirstName()}"></h1>
         <p th:text="'Last Name :' + ${user.getFirstName()}"></p>
+        <p th:text="'Bio :' + ${user.getBio()}"></p>
+    </div>
+    <div class="containers">
+        <form action="/post" method="post">
+            <label for="body">body of your post</label>
+            <input type="text" class="form-control" name="body" id="body"></br>
+            <input type="submit" value="post" class="btn btn-primary">
+        </form>
+    </div>
+
+    <div th:if="${post}" th:each="post :${post}" class="containers darker">
+        <div th:each="posts :${post.getPosts()}" class="post">
+            <div>
+                <img th:src="${post.getImgUrl()}" th:alt="${post.getPosts().get(0).getApplicationUser().getFirstName()}">
+            </div>
+            <div>
+                <p th:text="${posts.getBody()}"></p>
+            </div>
+            <div>
+                <span class="time-right" th:text="${posts.getCreatedAt()}"></span>
+            </div>
+        </div>
     </div>
 </main>
 
