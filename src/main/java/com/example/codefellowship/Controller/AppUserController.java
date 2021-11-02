@@ -84,8 +84,12 @@ public class AppUserController {
     }
     @GetMapping("/user")
     public String allUsers(Model m, Principal p){
-        m.addAttribute("username",(ArrayList) appUserRepository.findAll());
-        m.addAttribute("user",appUserRepository.findAll());
+        ApplicationUser applicationUser1 = appUserRepository.findByUsername(p.getName());
+
+        List<ApplicationUser> applicationUser = (List<ApplicationUser>) appUserRepository.findAll();
+//        m.addAttribute("username",(ArrayList) appUserRepository.findAll());
+        m.addAttribute("user",applicationUser);
+        m.addAttribute("autho",applicationUser1);
         return "users";
     }
     @GetMapping("/specificUser/{id}")
@@ -97,5 +101,27 @@ public class AppUserController {
             return "specificUser";
         }
         return "/error?message=You%are%not%allow%to%delete%the%user";
+    }
+    @GetMapping("/follow/{id}")
+    public RedirectView follow(@PathVariable Integer id,Principal p){
+        ApplicationUser applicationUser = appUserRepository.findByUsername(p.getName());
+        ApplicationUser user = appUserRepository.findById(id).get();
+        applicationUser.setFollowing(user);
+        appUserRepository.save(applicationUser);
+        return new RedirectView("/user");
+    }
+    @GetMapping("/unfollow/{id}")
+    public RedirectView unfollow(@PathVariable Integer id,Principal p){
+        ApplicationUser applicationUser = appUserRepository.findByUsername(p.getName());
+        ApplicationUser user = appUserRepository.findById(id).get();
+        applicationUser.getFollowing().remove(user);
+        appUserRepository.save(applicationUser);
+        return new RedirectView("/user");
+    }
+    @GetMapping("/feed")
+    public String feed(Principal p,Model m){
+        ApplicationUser applicationUser = appUserRepository.findByUsername(p.getName());
+        m.addAttribute("feeds",applicationUser.getFollowing());
+        return "feed";
     }
 }

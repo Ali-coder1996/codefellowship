@@ -26,7 +26,15 @@ public class ApplicationUser implements UserDetails {
     private String imgUrl;
     @OneToMany(mappedBy = "applicationUser",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Post> posts;
+    @ManyToMany
+    @JoinTable(
+            name = "user_following",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "follower_id"))
+    private List<ApplicationUser> following;
 
+    @ManyToMany(mappedBy = "following")
+    private List<ApplicationUser> followers;
 
     public ApplicationUser() {
     }
@@ -41,6 +49,21 @@ public class ApplicationUser implements UserDetails {
         this.imgUrl = imgUrl;
     }
 
+    public List<ApplicationUser> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(ApplicationUser following) {
+        this.following.add(following);
+    }
+
+    public List<ApplicationUser> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<ApplicationUser> followers) {
+        this.followers = followers;
+    }
 
     public List<Post> getPosts() {
         return posts;
@@ -132,4 +155,6 @@ public class ApplicationUser implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }
